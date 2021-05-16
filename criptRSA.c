@@ -5,27 +5,28 @@
 #include <unistd.h>
 #include <ctype.h>
 
-/* 
-                       ** A função que ira gerar a chave publica sera a [public_key()]. **
-        No RSA as chaves são geradas da seguinte maneira:
-    1. Escolha de forma aleatória dois números primos grandes p e q, da ordem de 10
-    100
-    no mínimo
-    2. Calcule n=pq (onde p e q são numeros primos distintos)
-    3. Escolha um inteiro 'e' tal que 1 < e < (p-1)*(q-1), de forma que 'e' e (p-1)*(q-1) sejam co-primos
-    (ou seja, o único divisor comum seja 1)
-    4. Calcule d de forma que de ≡ 1 (p-1)*(q-1)), ou seja, d seja o inverso multiplicativo
-    de e em (p-1)*(q-1)).
-        Por fim, temos: A chave pública: o par (n, e,), e a chave privada: a tripla (p, q, d).  <¬
-                                                            **(calculamos o valor de d na função[decrypt])**
-                       ** A função que ira realizar a criptografia sera a encrypt(). **
-        Para transformar uma mensagem numa mensagem cifrada usando achave pública ('n' e 'e') gerada 
-    na funcao anterior basta fazer uma potenciação modular: (mensagem real)^e ≡ (cifra)(mod n).
+/*
+    ** A FUNÇÃO QUE IRA GERAR A CHAVE PUBLICA SERA A [PUBLIC_KEY()]. **
+No RSA as chaves são geradas da seguinte maneira:
+1. Escolha de forma aleatória dois números primos grandes p e q, da ordem de 10
+100
+no mínimo
+2. Calcule n=pq (onde p e q são números primos distintos)
+3. Escolha um inteiro 'e' tal que 1 < e < (p-1)*(q-1), de forma que 'e' e (p-1)*(q-1) sejam co-primos
+(ou seja, o único divisor comum seja 1)
+4. Calcule d de forma que de ≡ 1 (p-1)*(q-1)), ou seja, d seja o inverso multiplicativo
+de e em (p-1)*(q-1)).
+Por fim, temos: A chave pública: o par (n, e,), e a chave privada: a tripla (p, q, d). <¬
+**(calculamos o valor de d na função[decrypt])**
 
-                         A função que ira realizar a drescriptografia sera a decrypt().
-        Para recuperar a mensagem da mensagem cifrada usando a respectiva chave privada
-     n e d, basta fazer outra potenciação modular: (cifra)^d ≡ (mensagem real)(mod n).
-*/
+    ** A FUNÇÃO QUE IRA REALIZAR A CRIPTOGRAFIA SERA A ENCRYPT(). **
+Para transformar uma mensagem numa mensagem cifrada usando achave pública ('n' e 'e') gerada
+na função anterior basta fazer uma potenciação modular: (mensagem real)^e ≡ (cifra)(mod n).
+
+**A FUNÇÃO QUE IRA REALIZAR A DRESCRIPTOGRAFIA SERA A DECRYPT().**
+Para recuperar a mensagem da mensagem cifrada usando a respectiva chave privada
+n e d, basta fazer outra potenciação modular: (cifra)^d ≡ (mensagem real)(mod n).
+*
 
 void public_key();
                                     /*Funcoes utilizadas na função [public_key]*/
