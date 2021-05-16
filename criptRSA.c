@@ -26,7 +26,7 @@ na função anterior basta fazer uma potenciação modular: (mensagem real)^e �
 **A FUNÇÃO QUE IRA REALIZAR A DRESCRIPTOGRAFIA SERA A DECRYPT().**
 Para recuperar a mensagem da mensagem cifrada usando a respectiva chave privada
 n e d, basta fazer outra potenciação modular: (cifra)^d ≡ (mensagem real)(mod n).
-*
+*/
 
 void public_key();
                                     /*Funcoes utilizadas na função [public_key]*/
@@ -233,7 +233,7 @@ int main()
     {
         printf("*********************************\n");
         printf("\t |Para GERAR UMA CHAVE PUBLICA digite (1).|\n\t |Para EMCRIPITAR uma mensagem digite (2).|\n\t |Para DESENCRIPTAR uma mensagem digite (3).|\n");
-        printf("\t |SAIR(4)|\n");
+        printf("\t |SAIR(0)|\n");
         scanf("%hd", &ans);
         if (ans == 1)
         {
@@ -250,7 +250,7 @@ int main()
             printf("*********************************\n");
             printf("Opcao: DESENCRIPTAR.\n");
             decrypt();
-        } else if (ans == 4){printf("FINALIZANDO PROGRAMA\n"); break;}
+        } else if (ans == 0){printf("FINALIZANDO PROGRAMA\n"); break;}
         else {printf("OPÇÃO INVALIDA\n");}
     }
     return 0;
