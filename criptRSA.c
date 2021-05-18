@@ -79,10 +79,10 @@ void encrypt()
                 else if (txtcript[i] == 32){txtcript[i]-=4;} //caso de ser um espaço
             }
             printf("%s\n", txtentrada);
-           for(int i = 0; i<tamanhoDotxt-1; i++)
+           /*for(int i = 0; i<tamanhoDotxt-1; i++)
             {
                 printf("%llu\n", txtcript[i]);
-            }
+            }*/
         printf("*********************************\n");
         printf("Agora digite 'n' e 'e'\n");
         setbuf(stdin, NULL);
@@ -98,10 +98,10 @@ void encrypt()
         for(int i =0; i<tamanhoDotxt-1; i++)
         {                              /*PROCESSO DE CRIPTOGRAFIA*/
                                 /*(mensagem real)^e ≡ (cifra)(mod n)*/
-            powAUX=pow(txtcript[i],e);
-            powAUX %= n;
-            txtcript[i]= powAUX;
-            fprintf(encrypted_message, "%llu ", txtcript[i]);
+            powAUX=pow(txtcript[i],e); // aqui txtcript ainda esta nos valores referente a cada letra do projeto
+            powAUX %= n;               // apos a poentenciação e o processo de % n, caracter por caracter
+            txtcript[i]= powAUX;       // temos o texto criptografado
+            fprintf(encrypted_message, "%llu ", txtcript[i]); //salvamento em um arquivo txt
         }
         fclose(encrypted_message);
         printf("\a\t\t\t*******************\n");
@@ -137,7 +137,7 @@ void public_key()
 
     while (1)
     {
-        if (!ehprimo(p) || !ehprimo(q))
+        if (!ehprimo(p) || !ehprimo(q)) // verificando primalidade dos numeros escolhidos
         {
             printf("ERRO: Pelo menos uns dos numeros não eh primo\n");
             printf("Caso deseje ESCOLHER OUTROS VALORES digite 1, para FiNALIZAR O PROGRAMA digite 0\n");
@@ -156,9 +156,9 @@ void public_key()
             // escolher e;
         e = escolherE(p,q);
         
-        FILE *key_folder;
-        key_folder = fopen("public_key.txt", "w");
-        if(key_folder == NULL)
+        FILE *publicK;
+        publicK = fopen("public_key.txt", "w");
+        if(publicK == NULL)
     {
         // ERRO ao criar pasta
         printf("Nao foi possivel criar o TXT.\n");
@@ -167,8 +167,8 @@ void public_key()
         if (aux){printf("n = %llu\n e = %llu", p * q, e);}
         else{printf("PROGRAMA FINALIZADO!.\n"); exit(0);}
     }
-        fprintf(key_folder, "n = %llu, e = %llu", p * q, e);
-        fclose(key_folder);
+        fprintf(publicK, "n = %llu, e = %llu", p * q, e); // criação da pasta [public_key] que vai conter 'n' e 'e'
+        fclose(publicK);
         printf("\a\n********************\n");
         printf("Chave criada com sucesso!\n RETORNANDO AO MENU PRINCIPAL.\n");
         printf("\n********************\n");
@@ -180,13 +180,13 @@ void decrypt()
 {
     unsigned long long int p,q,e,d,n;
     unsigned long long int tamanhostr;
-
+    printf("ESSA OPCAO IRA DESENCRIPTAR A MENSAGEM QUE ESTA NO ARQUIVO [encrypted_message.TXT]\n");
     printf("Insira os valores de 'p', 'q' e 'e'.\n");
     setbuf(stdin, NULL);
     scanf("%llu%llu%llu", &p, &q, &e);
     setbuf(stdin, NULL);
     printf("Aguarde...\n");
-    d= D(e, ((p - 1) * (q - 1)));
+    d= D(e, ((p - 1) * (q - 1))); // o expoente que vai elevar a mensagem cifrada
     n = p*q;
 
     unsigned long long int txtcript[100000];
@@ -194,8 +194,13 @@ void decrypt()
 
     FILE *encrypted_message;
     encrypted_message = fopen("encrypted_message.txt", "r");
+    if (encrypted_message== NULL)
+    {
+        printf("ERRO: NÃO EXISTE UM ARQUIVO CHAMADO [encrypted_message.TXT]\n RETORNANDO AO MENU PRINCIPAL.\n");
+        return;
+    }
 
-    for(int i =0; !feof(encrypted_message); i++)
+    for(int i =0; !feof(encrypted_message); i++) // passa o conteudo do txt [encrypted_message] para uma string
     {
         fscanf(encrypted_message, "%llu", &txtcript[i]);
         tamanhostr = i;
@@ -293,13 +298,14 @@ int ehprimo(unsigned long long int x)
     int resu=1;
     for (unsigned long long int i =2; i< x; i++)
 {
-    if (x%i==0){resu=0;}
-}
+    if (x%i==0){resu=0;} // calcula o resto da divisão entre 2 e x-1, caso esse resultado der 0
+}                       // esse valor x não é um numero primo
     return resu;
 }
 
 unsigned long long int D(unsigned long long int x, unsigned long long int modulo)
 {                       //usando comgruencia linear
+                        // x =e | modulo = (p - 1) * (q - 1)
         unsigned long long int ans, d=1;
 
    while(1)
@@ -314,6 +320,7 @@ unsigned long long int D(unsigned long long int x, unsigned long long int modulo
 
 unsigned long long int potencia(unsigned long long int a, unsigned long long int e, unsigned long long int n){
 	            //Calcula a forma reduzida de a^e módulo n, usando a expansão binária do expoente
+                // a= cifra | e = d | n = p*q
 	long long int A = a, P = 1, E = e;
 	while(1){
 		//Chegou ao fim da expansão, retorna o P
